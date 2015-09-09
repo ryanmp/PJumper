@@ -1,0 +1,5 @@
+
+on death.. some simple particle effect (check for slow down!)
+
+fix the rotation friction thingy (player doesn't perfectly match planet's rotation)
+

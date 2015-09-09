@@ -46,8 +46,12 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\planet.cs" />
-     <Compile Include="Assets\player.cs" />
+     <Compile Include="Assets\Scripts\camera.cs" />
+     <Compile Include="Assets\Scripts\level.cs" />
+     <Compile Include="Assets\Scripts\planet.cs" />
+     <Compile Include="Assets\Scripts\player.cs" />
+     <Compile Include="Assets\Scripts\time.cs" />
+     <None Include="Assets\todo.txt" />
  <Reference Include="UnityEngine.Analytics">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>

@@ -1,8 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/planet.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/level.cs">
     <Files>
-      <File FileName="Assets/planet.cs" Line="14" Column="67" />
+      <File FileName="Assets/Scripts/player.cs" Line="30" Column="15" />
+      <File FileName="Assets/Scripts/planet.cs" Line="22" Column="36" />
+      <File FileName="Assets/Scripts/camera.cs" Line="12" Column="32" />
+      <File FileName="Assets/todo.txt" Line="6" Column="1" />
+      <File FileName="Assets/Scripts/level.cs" Line="48" Column="26" />
+      <File FileName="Assets/Scripts/time.cs" Line="20" Column="56" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
