@@ -46,7 +46,7 @@ public class player : MonoBehaviour
 			}
 		} else { // resetting!
 			float t = (Time.time - reset_start_time) / reset_duration;
-			Debug.Log (t);
+			//Debug.Log (t);
 			if (t > 1f) {
 				gameObject.transform.position = starting_pos;
 				gameObject.GetComponent<Rigidbody2D> ().isKinematic = false;
@@ -98,11 +98,12 @@ public class player : MonoBehaviour
 
 	void Jump ()
 	{
-		//Debug.Log ("jumped?");
-
+		Debug.Log ("jumped?");
+		gameObject.GetComponent<Rigidbody2D> ().isKinematic = false;
 		Vector3 dir = (gameObject.transform.position - on_this_object.transform.position).normalized;
 		Vector2 j = dir * jump_velocity;
 		gravity_on = false;
+		gameObject.transform.parent = null;
 		gameObject.GetComponent<Rigidbody2D> ().velocity = j;
 
 	}
@@ -110,9 +111,11 @@ public class player : MonoBehaviour
 
 	void OnCollisionEnter2D (Collision2D c)
 	{
+		gameObject.GetComponent<Rigidbody2D> ().isKinematic = true;
 		Debug.Log (c.gameObject.name);
 		if (c.gameObject.tag == "jumpable") {
 			on_this_object = c.gameObject;
+			gameObject.transform.parent = c.gameObject.transform;
 			gravity_on = true;
 		} else if (c.gameObject.tag == "death") {
 			Reset ();
