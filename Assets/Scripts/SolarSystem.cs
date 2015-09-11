@@ -7,9 +7,17 @@ public class SolarSystem : MonoBehaviour
 {
 
 	public GameObject planet;
-
-
 	public GameObject spikes;
+
+
+	// for orbitals
+	private float min_orbital_vel = 8f;
+	private float max_orbital_vel = 20f;
+
+	// for planet and spike rotation
+	private float min_angular_vel = 30f;
+	private float max_angular_vel = 50f;
+
 
 
 
@@ -30,13 +38,13 @@ public class SolarSystem : MonoBehaviour
 		orbital.transform.parent = transform;
 		Rigidbody2D rb = orbital.AddComponent<Rigidbody2D> ();
 		rb.isKinematic = true;
-		rb.angularVelocity = 5f;
+		rb.angularVelocity = GenAngularVelocity (min_orbital_vel, max_orbital_vel);
 		float radius = 4f;
 		List<float> angles = new List<float> ();
 		int count = 15;
 		for (int i = 0; i < count; i++) {
 			float this_angle = Mathf.Lerp (0f, 360f, i * 1f / count * 1f);
-			Debug.Log (this_angle);
+			//Debug.Log (this_angle);
 			angles.Add (this_angle);
 		}
 		foreach (float angle in angles) {
@@ -45,7 +53,7 @@ public class SolarSystem : MonoBehaviour
 			GameObject go = Instantiate (planet, loc, Quaternion.identity) as GameObject;
 			go.transform.localScale = Vector3.one * Random.Range (0.5f, 1.0f);
 			go.transform.parent = orbital.transform;
-			go.SendMessage ("Init", Random.Range (-50f, 50f));
+			go.SendMessage ("Init", GenAngularVelocity (min_angular_vel, max_angular_vel));
 		}
 
 		// create orbital outline
@@ -72,7 +80,9 @@ public class SolarSystem : MonoBehaviour
 		orbital.transform.parent = transform;
 		rb = orbital.AddComponent<Rigidbody2D> ();
 		rb.isKinematic = true;
-		rb.angularVelocity = -5f;
+
+		rb.angularVelocity = GenAngularVelocity (min_orbital_vel, max_orbital_vel);
+
 		radius = 6f;
 		angles = new List<float> ();
 		count = 10;
@@ -86,7 +96,7 @@ public class SolarSystem : MonoBehaviour
 			GameObject go = Instantiate (spikes, loc, Quaternion.identity) as GameObject;
 			go.transform.localScale = Vector3.one * Random.Range (0.5f, 0.6f);
 			go.transform.parent = orbital.transform;
-			go.SendMessage ("Init", Random.Range (-50f, 50f));
+			go.SendMessage ("Init", GenAngularVelocity (min_angular_vel, max_angular_vel));
 		}
 		
 		// create orbital outline
@@ -115,7 +125,7 @@ public class SolarSystem : MonoBehaviour
 		orbital.transform.parent = transform;
 		rb = orbital.AddComponent<Rigidbody2D> ();
 		rb.isKinematic = true;
-		rb.angularVelocity = -5f;
+		rb.angularVelocity = GenAngularVelocity (min_orbital_vel, max_orbital_vel);
 		radius = 8f;
 		angles = new List<float> ();
 		count = 20;
@@ -129,7 +139,7 @@ public class SolarSystem : MonoBehaviour
 			GameObject go = Instantiate (planet, loc, Quaternion.identity) as GameObject;
 			go.transform.localScale = Vector3.one * Random.Range (0.5f, 2.0f);
 			go.transform.parent = orbital.transform;
-			go.SendMessage ("Init", Random.Range (-50f, 50f));
+			go.SendMessage ("Init", GenAngularVelocity (min_angular_vel, max_angular_vel));
 		}
 		
 		// create orbital outline
@@ -153,7 +163,23 @@ public class SolarSystem : MonoBehaviour
 
 
 	}
-	
+
+
+	//returns a float between min and max
+	//(either negative or positive ---  like 10 -> 15 || -10 -> -15 (avoids slow motion))
+	float GenAngularVelocity (float _min, float _max)
+	{
+		float bool_gen = Random.value;
+		float orbital_dir = 0f;
+		if (bool_gen > 0.5f) {
+			orbital_dir = 1f;
+		} else {
+			orbital_dir = -1f;
+		}
+		return Random.Range (_min, _max) * orbital_dir;
+	}
+
+
 	// Update is called once per frame
 	void Update ()
 	{

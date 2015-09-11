@@ -6,6 +6,9 @@ public class player : MonoBehaviour
 
 
 
+
+
+
 	public float jump_velocity;
 
 	private bool gravity_on = true;
@@ -25,12 +28,21 @@ public class player : MonoBehaviour
 	private GameObject on_this_object;
 
 	public level level;
+	
+	public AudioClip jump_sound;
+	public AudioClip landing_sound;
+
+	private bool is_jumping = false;
+
+	public camera c;
+
 
 	// Use this for initialization
 	void Start ()
 	{
 		on_this_object = start_obj;
 		starting_pos = gameObject.transform.position;
+		gameObject.GetComponent<ParticleSystem> ().enableEmission = false;
 	}
 	
 	// Update is called once per frame
@@ -64,13 +76,14 @@ public class player : MonoBehaviour
 
 	void CheckBounds ()
 	{
+		/*
 		float my_radius = gameObject.transform.localScale.x / 2f;
 
 		if (Mathf.Abs (gameObject.transform.position.x) > (death_bounds.transform.localScale.x / 2f) - my_radius) {
 			Reset ();
 		} else if (Mathf.Abs (gameObject.transform.position.y) > (death_bounds.transform.localScale.y / 2f) - my_radius) {
 			Reset ();
-		}
+		}*/
 	}
 
 	void GetInput ()
@@ -98,25 +111,46 @@ public class player : MonoBehaviour
 
 	void Jump ()
 	{
-		Debug.Log ("jumped?");
-		gameObject.GetComponent<Rigidbody2D> ().isKinematic = false;
-		Vector3 dir = (gameObject.transform.position - on_this_object.transform.position).normalized;
-		Vector2 j = dir * jump_velocity;
-		gravity_on = false;
-		gameObject.transform.parent = null;
-		gameObject.GetComponent<Rigidbody2D> ().velocity = j;
 
+		if (!is_jumping) {
+
+			gameObject.GetComponent<ParticleSystem> ().enableEmission = true;
+
+			AudioSource audio_source = GetComponent<AudioSource> ();
+			AudioClip clip = jump_sound;
+			audio_source.clip = clip;
+			audio_source.volume = 0.2f;
+			audio_source.Play ();
+			gameObject.GetComponent<Rigidbody2D> ().isKinematic = false;
+			Vector3 dir = (gameObject.transform.position - on_this_object.transform.position).normalized;
+			Vector2 j = dir * jump_velocity;
+			gravity_on = false;
+			gameObject.transform.parent = null;
+			gameObject.GetComponent<Rigidbody2D> ().velocity = j;
+		}
+
+		is_jumping = true;
 	}
 
 
 	void OnCollisionEnter2D (Collision2D c)
 	{
+		is_jumping = false;
+		gameObject.GetComponent<ParticleSystem> ().enableEmission = false;
 		gameObject.GetComponent<Rigidbody2D> ().isKinematic = true;
 		Debug.Log (c.gameObject.name);
 		if (c.gameObject.tag == "jumpable") {
 			on_this_object = c.gameObject;
 			gameObject.transform.parent = c.gameObject.transform;
 			gravity_on = true;
+
+			AudioSource audio_source = GetComponent<AudioSource> ();
+			AudioClip clip = landing_sound;
+			audio_source.clip = clip;
+			audio_source.volume = 0.05f;
+			audio_source.Play ();
+
+
 		} else if (c.gameObject.tag == "death") {
 			Reset ();
 		}
@@ -127,6 +161,7 @@ public class player : MonoBehaviour
 	void Reset ()
 	{
 		Debug.Log ("reset!");
+		//c.shake = 2f;
 		reset = true;
 		reset_start_time = Time.time;
 		reset_start_pos = gameObject.transform.position;
